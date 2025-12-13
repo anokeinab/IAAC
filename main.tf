@@ -7,9 +7,7 @@ terraform {
   }
 }
 provider "aws" {
-  region = "us-east-2"
-  access_key = var.accessKey
-  secret_key = var.secretKey  
+  region = "us-east-2"  
 }
 
 # Create backend security group without rules
