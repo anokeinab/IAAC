@@ -11,7 +11,7 @@
 # Variable files that might contain sensitive data
 *.tfvars
 *.tfvars.json
-variables.tf
+# variables.tf
 
 # Ignore override files as they are usually used to override resources locally
 # and should not be committed
