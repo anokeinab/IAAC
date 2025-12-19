@@ -18,3 +18,15 @@ variable "ami_ubuntu_id" {
   description = "AMI ID for Ubuntu 24"
   default     = "ami-0cfde0ea8edd312d4"
 }
+
+variable "accesskey"{
+    description = "access key"
+    type = string
+    sensitive = true
+}
+
+variable "secretkey"{
+    description = "secret key"
+    type = string
+    sensitive = true
+}
