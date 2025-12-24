@@ -30,3 +30,15 @@ variable "secretkey"{
     type = string
     sensitive = true
 }
+
+variable "db_username"{
+    description = "database username"
+    type = string
+    sensitive = true
+}
+
+variable "db_passw" {
+  description = "database password"
+  type = string
+  sensitive = true
+}
