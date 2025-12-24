@@ -111,8 +111,8 @@ resource "aws_db_instance" "vp_rds" {
   engine_version       = "8.0.39" # Specify your desired version
   instance_class       = "db.t3.micro" # Choose an appropriate instance type
   identifier           = "vp-rds"
-  username             = "admin"
-  password             = "MyStrongPassword123!" # Use a secure method for passwords in production
+  username             = var.db_username
+  password             = var.db_passw # Use a secure method for passwords in production
   parameter_group_name = aws_db_parameter_group.vp_rds_pg.name
   db_subnet_group_name = aws_db_subnet_group.vp_rds_subnet_group.name
   vpc_security_group_ids = [aws_security_group.backend_sg.id]
