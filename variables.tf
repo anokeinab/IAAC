@@ -19,26 +19,26 @@ variable "ami_ubuntu_id" {
   default     = "ami-0cfde0ea8edd312d4"
 }
 
-variable "accesskey"{
-    description = "access key"
-    type = string
-    sensitive = true
+variable "accesskey" {
+  description = "access key"
+  type        = string
+  sensitive   = true
 }
 
-variable "secretkey"{
-    description = "secret key"
-    type = string
-    sensitive = true
+variable "secretkey" {
+  description = "secret key"
+  type        = string
+  sensitive   = true
 }
 
-variable "db_username"{
-    description = "database username"
-    type = string
-    sensitive = true
+variable "db_username" {
+  description = "database username"
+  type        = string
+  sensitive   = true
 }
 
 variable "db_passw" {
   description = "database password"
-  type = string
-  sensitive = true
+  type        = string
+  sensitive   = true
 }
