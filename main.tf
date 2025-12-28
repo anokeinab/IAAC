@@ -13,11 +13,11 @@ provider "aws" {
 }
 
 # Create a security group for admin instance
- resource "aws_security_group" "admin"{
-  name = "admin-sg"
+resource "aws_security_group" "admin" {
+  name        = "admin-sg"
   description = "This is the security applied to the admin ec2 instance"
-  vpc_id = aws_vpc.vp_vpc.id
- }
+  vpc_id      = aws_vpc.vp_vpc.id
+}
 
 # Create backend security group without rules
 
