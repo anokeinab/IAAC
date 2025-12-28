@@ -13,11 +13,32 @@ provider "aws" {
 }
 
 # Create a security group for admin instance
-resource "aws_security_group" "admin" {
-  name        = "admin-sg"
-  description = "This is the security applied to the admin ec2 instance"
-  vpc_id      = aws_vpc.vp_vpc.id
-}
+ resource "aws_security_group" "admin"{
+  name = "admin-sg"
+  description = "This is the security applied to the admin ec2 instance for ssh connexion"
+  vpc_id = aws_vpc.vp_vpc.id
+
+  # Ingress rule for SSH (port 22)
+  ingress {
+    description = "SSH from anywhere"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"] # Allows SSH from all IPv4 addresses
+  }
+
+  # Egress rule to allow all outbound traffic (default in AWS, but explicit in Terraform)
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1" # Represents all protocols
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "allow_ssh_sg"
+  }
+ }
 
 # Create backend security group without rules
 
@@ -41,8 +62,8 @@ resource "aws_security_group_rule" "allow_self_ingress" {
 resource "aws_instance" "admin" {
   ami                    = var.ami_ubuntu_id
   instance_type          = var.instance_type
-  subnet_id              = aws_subnet.private_subnet_a.id
-  vpc_security_group_ids = [aws_security_group.backend_sg.id]
+  subnet_id              = aws_subnet.public.id
+  vpc_security_group_ids = [aws_security_group.admin.id]
   key_name               = var.key_name
 
   tags = {
