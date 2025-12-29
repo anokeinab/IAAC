@@ -46,6 +46,14 @@ resource "aws_security_group" "backend_sg" {
   name        = "backend-sg"
   description = "This is the backend security group"
   vpc_id      = aws_vpc.vp_vpc.id
+
+   ingress {
+    description     = "Security group to allow mysql connexion from admin security group"
+    from_port       = 3306
+    to_port         = 3306
+    protocol        = "tcp"
+    security_groups = [aws_security_group.admin.id]
+  }
 }
 # Create a self ingress rule for the backend sg to allow services in the backend to communication with eahc other
 resource "aws_security_group_rule" "allow_self_ingress" {
