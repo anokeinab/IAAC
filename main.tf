@@ -111,7 +111,7 @@ resource "aws_db_parameter_group" "vp_rds_pg" {
 # Create subnet groups for RDS
 resource "aws_subnet" "private_subnet_a" {
   vpc_id            = aws_vpc.vp_vpc.id
-  cidr_block        = "10.0.2.0/24"
+  cidr_block        = "10.0.64.0/19"
   availability_zone = "us-east-2a" # Replace with your desired AZ
   tags = {
     Name = "private-subnet-a"
@@ -120,7 +120,7 @@ resource "aws_subnet" "private_subnet_a" {
 
 resource "aws_subnet" "private_subnet_b" {
   vpc_id            = aws_vpc.vp_vpc.id
-  cidr_block        = "10.0.3.0/24"
+  cidr_block        = "10.0.96.0/19"
   availability_zone = "us-east-2b" # Replace with your desired AZ
   tags = {
     Name = "private-subnet-b"
