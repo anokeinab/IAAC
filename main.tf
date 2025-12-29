@@ -73,6 +73,7 @@ resource "aws_instance" "admin" {
   subnet_id              = aws_subnet.public.id
   vpc_security_group_ids = [aws_security_group.admin.id]
   key_name               = var.key_name
+  user_data     = file("${path.module}/initializedb.sh")
 
   tags = {
     Name = "vprofile-adm"
@@ -144,7 +145,7 @@ resource "aws_db_subnet_group" "vp_rds_subnet_group" {
 resource "aws_db_instance" "vp_rds" {
   allocated_storage      = 20
   engine                 = "mysql"
-  engine_version         = "8.0.39"      # Specify your desired version
+  engine_version         = "8.0.42"      # Specify your desired version
   instance_class         = "db.t3.micro" # Choose an appropriate instance type
   identifier             = "vp-rds"
   username               = var.db_username
