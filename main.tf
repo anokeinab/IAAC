@@ -197,3 +197,27 @@ resource "aws_mq_broker" "example_broker" {
     Environment = "Development"
   }
 }
+
+# Create Role for elastic beanstalk
+
+resource "aws_iam_role" "vp_beans_role" {
+  name = "vp-rearch-beanstalk"
+  description = "vprofile beanstalk role"
+
+  assume_role_policy = jsonencode({
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "sts:AssumeRole"
+            ],
+            "Principal": {
+                "Service": [
+                    "ec2.amazonaws.com"
+                ]
+            }
+        }
+    ]
+  })
+}
