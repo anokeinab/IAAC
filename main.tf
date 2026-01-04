@@ -221,3 +221,25 @@ resource "aws_iam_role" "vp_beans_role" {
     ]
   })
 }
+
+# Attach policy to the role
+
+resource "aws_iam_role_policy_attachment" "AdministratorAccess-AWSElasticBeanstalk" {
+  role       = aws_iam_role.vp_beans_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess-AWSElasticBeanstalk"
+}
+
+resource "aws_iam_role_policy_attachment" "AWSElasticBeanstalkCustomPlatformforEC2Role" {
+  role       = aws_iam_role.vp_beans_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AWSElasticBeanstalkCustomPlatformforEC2Role"
+}
+
+resource "aws_iam_role_policy_attachment" "AWSElasticBeanstalkRoleSNS" {
+  role       = aws_iam_role.vp_beans_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSElasticBeanstalkRoleSNS"
+}
+
+resource "aws_iam_role_policy_attachment" "AWSElasticBeanstalkWebTier" {
+  role       = aws_iam_role.vp_beans_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AWSElasticBeanstalkWebTier"
+}
