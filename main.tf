@@ -214,7 +214,8 @@ resource "aws_iam_role" "vp_beans_role" {
             ],
             "Principal": {
                 "Service": [
-                    "ec2.amazonaws.com"
+                    "elasticbeanstalk.amazonaws.com"
+
                 ]
             }
         }
