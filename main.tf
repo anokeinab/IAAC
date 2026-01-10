@@ -223,7 +223,7 @@ resource "aws_iam_role" "vp_ec2_beans_role" {
   })
 }
 
-# Attach policy to the role
+# Attach permissions to ec2 beanstalk role
 
 resource "aws_iam_role_policy_attachment" "AdministratorAccess-AWSElasticBeanstalk" {
   role       = aws_iam_role.vp_ec2_beans_role.name
@@ -241,10 +241,11 @@ resource "aws_iam_role_policy_attachment" "AWSElasticBeanstalkRoleSNS" {
 }
 
 resource "aws_iam_role_policy_attachment" "AWSElasticBeanstalkWebTier" {
-  role       = aws_iam_role.vp_beans_role.name
+  role       = aws_iam_role.vp_ec2_beans_role.name
   policy_arn = "arn:aws:iam::aws:policy/AWSElasticBeanstalkWebTier"
 }
 
+# Create beanstalk role
 resource "aws_iam_role" "vp_beanstalk_role" {
   name = "vp-beanstalk"
   description = "vprofile beanstalk role"
@@ -267,3 +268,16 @@ assume_role_policy = jsonencode({
   })
   
 }
+
+# Attach permission to the beanstalk role
+
+resource "aws_iam_role_policy_attachment" "AWSElasticBeanstaklEnhancedHealth" {
+  role       = aws_iam_role.vp_beanstalk_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSElasticBeanstalkEnhancedHealth"
+}
+
+resource "aws_iam_role_policy_attachment" "AWSElasticBeanstalkManagedUpdatesCustomerRolePolicy" {
+  role       = aws_iam_role.vp_beanstalk_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AWSElasticBeanstalkManagedUpdatesCustomerRolePolicy"
+}
+
