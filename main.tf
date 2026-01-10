@@ -13,10 +13,10 @@ provider "aws" {
 }
 
 # Create a security group for admin instance
- resource "aws_security_group" "admin"{
-  name = "admin-sg"
+resource "aws_security_group" "admin" {
+  name        = "admin-sg"
   description = "This is the security applied to the admin ec2 instance for ssh connexion"
-  vpc_id = aws_vpc.vp_vpc.id
+  vpc_id      = aws_vpc.vp_vpc.id
 
   # Ingress rule for SSH (port 22)
   ingress {
@@ -38,7 +38,7 @@ provider "aws" {
   tags = {
     Name = "allow_ssh_sg"
   }
- }
+}
 
 # Create backend security group without rules
 
@@ -47,7 +47,7 @@ resource "aws_security_group" "backend_sg" {
   description = "This is the backend security group"
   vpc_id      = aws_vpc.vp_vpc.id
 
-   ingress {
+  ingress {
     description     = "Security group to allow mysql connexion from admin security group"
     from_port       = 3306
     to_port         = 3306
@@ -73,7 +73,7 @@ resource "aws_instance" "admin" {
   subnet_id              = aws_subnet.public.id
   vpc_security_group_ids = [aws_security_group.admin.id]
   key_name               = var.key_name
-  user_data     = file("${path.module}/initializedb.sh")
+  user_data              = file("${path.module}/initializedb.sh")
 
   tags = {
     Name = "vprofile-adm"
@@ -201,24 +201,24 @@ resource "aws_mq_broker" "example_broker" {
 # Create Role for elastic beanstalk
 
 resource "aws_iam_role" "vp_beans_role" {
-  name = "vp-rearch-beanstalk"
+  name        = "vp-rearch-beanstalk"
   description = "vprofile beanstalk role"
 
   assume_role_policy = jsonencode({
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": [
-                "sts:AssumeRole"
-            ],
-            "Principal": {
-                "Service": [
-                    "ec2.amazonaws.com"
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "sts:AssumeRole"
+        ],
+        "Principal" : {
+          "Service" : [
+            "ec2.amazonaws.com"
 
-                ]
-            }
+          ]
         }
+      }
     ]
   })
 }
