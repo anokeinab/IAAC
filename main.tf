@@ -13,10 +13,10 @@ provider "aws" {
 }
 
 # Create a security group for admin instance
-resource "aws_security_group" "admin" {
-  name        = "admin-sg"
+ resource "aws_security_group" "admin"{
+  name = "admin-sg"
   description = "This is the security applied to the admin ec2 instance for ssh connexion"
-  vpc_id      = aws_vpc.vp_vpc.id
+  vpc_id = aws_vpc.vp_vpc.id
 
   # Ingress rule for SSH (port 22)
   ingress {
@@ -38,7 +38,7 @@ resource "aws_security_group" "admin" {
   tags = {
     Name = "allow_ssh_sg"
   }
-}
+ }
 
 # Create backend security group without rules
 
@@ -47,7 +47,7 @@ resource "aws_security_group" "backend_sg" {
   description = "This is the backend security group"
   vpc_id      = aws_vpc.vp_vpc.id
 
-  ingress {
+   ingress {
     description     = "Security group to allow mysql connexion from admin security group"
     from_port       = 3306
     to_port         = 3306
@@ -73,7 +73,7 @@ resource "aws_instance" "admin" {
   subnet_id              = aws_subnet.public.id
   vpc_security_group_ids = [aws_security_group.admin.id]
   key_name               = var.key_name
-  user_data              = file("${path.module}/initializedb.sh")
+  user_data     = file("${path.module}/initializedb.sh")
 
   tags = {
     Name = "vprofile-adm"
@@ -198,27 +198,27 @@ resource "aws_mq_broker" "example_broker" {
   }
 }
 
-# Create Role for elastic beanstalk
+# Create EC2 role for elastic beanstalk
 
-resource "aws_iam_role" "vp_beans_role" {
-  name        = "vp-rearch-beanstalk"
-  description = "vprofile beanstalk role"
+resource "aws_iam_role" "vp_ec2_beans_role" {
+  name = "vp-ec2-beanstalk"
+  description = "vprofile ec2 beanstalk role"
 
   assume_role_policy = jsonencode({
-    "Version" : "2012-10-17",
-    "Statement" : [
-      {
-        "Effect" : "Allow",
-        "Action" : [
-          "sts:AssumeRole"
-        ],
-        "Principal" : {
-          "Service" : [
-            "ec2.amazonaws.com"
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "sts:AssumeRole"
+            ],
+            "Principal": {
+                "Service": [
+                    "ec2.amazonaws.com"
 
-          ]
+                ]
+            }
         }
-      }
     ]
   })
 }
@@ -226,21 +226,44 @@ resource "aws_iam_role" "vp_beans_role" {
 # Attach policy to the role
 
 resource "aws_iam_role_policy_attachment" "AdministratorAccess-AWSElasticBeanstalk" {
-  role       = aws_iam_role.vp_beans_role.name
+  role       = aws_iam_role.vp_ec2_beans_role.name
   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess-AWSElasticBeanstalk"
 }
 
 resource "aws_iam_role_policy_attachment" "AWSElasticBeanstalkCustomPlatformforEC2Role" {
-  role       = aws_iam_role.vp_beans_role.name
+  role       = aws_iam_role.vp_ec2_beans_role.name
   policy_arn = "arn:aws:iam::aws:policy/AWSElasticBeanstalkCustomPlatformforEC2Role"
 }
 
 resource "aws_iam_role_policy_attachment" "AWSElasticBeanstalkRoleSNS" {
-  role       = aws_iam_role.vp_beans_role.name
+  role       = aws_iam_role.vp_ec2_beans_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSElasticBeanstalkRoleSNS"
 }
 
 resource "aws_iam_role_policy_attachment" "AWSElasticBeanstalkWebTier" {
   role       = aws_iam_role.vp_beans_role.name
   policy_arn = "arn:aws:iam::aws:policy/AWSElasticBeanstalkWebTier"
+}
+
+resource "aws_iam_role" "vp_beanstalk_role" {
+  name = "vp-beanstalk"
+  description = "vprofile beanstalk role"
+assume_role_policy = jsonencode({
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "sts:AssumeRole"
+            ],
+            "Principal": {
+                "Service": [
+                    "elasticbeanstalk.amazonaws.com"
+
+                ]
+            }
+        }
+    ]
+  })
+  
 }
