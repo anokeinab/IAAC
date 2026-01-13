@@ -281,3 +281,9 @@ resource "aws_iam_role_policy_attachment" "AWSElasticBeanstalkManagedUpdatesCust
   policy_arn = "arn:aws:iam::aws:policy/AWSElasticBeanstalkManagedUpdatesCustomerRolePolicy"
 }
 
+# Create beanstalk application
+
+resource "aws_elastic_beanstalk_application" "app" {
+  name = "vp-app-bean"
+  
+}
